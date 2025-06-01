@@ -1,0 +1,26 @@
+Import-Module ActiveDirectory
+
+$users = Import-Csv -Path "C:\Atomic_Cleaned_User_Import.csv"
+
+foreach ($user in $users) {
+    $name = "$($user.FirstName) $($user.LastName)"
+    $sam = $user.Username
+    $password = ConvertTo-SecureString $user.Password -AsPlainText -Force
+    $ouPath = "OU=$($user.Department),OU=Users,DC=atomic,DC=local"
+
+    # Check if OU exists
+    if (Get-ADOrganizationalUnit -Filter "DistinguishedName -eq '$ouPath'" -ErrorAction SilentlyContinue) {
+        New-ADUser `
+            -Name $name `
+            -SamAccountName $sam `
+            -UserPrincipalName "$sam@atomic.local" `
+            -GivenName $user.FirstName `
+            -Surname $user.LastName `
+            -AccountPassword $password `
+            -Path $ouPath `
+            -Enabled $true `
+            -ChangePasswordAtLogon $false
+    } else {
+        Write-Warning "OU path not found: $ouPath. Skipping $name"
+    }
+}

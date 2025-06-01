@@ -1,0 +1,35 @@
+Domain: atomic.local
+
+Organizational Units (OUs)
+--------------------------
+atomic.local
+├── Users
+│   ├── Executives
+│   ├── Marketing
+│   ├── Sales
+│   ├── Logistics
+│   ├── Production
+│   ├── IT
+│   └── GeneralStaff
+│
+├── Computers
+│   ├── Workstations        # Dell OptiPlex 7020s for 90 users
+│   ├── Laptops             # 15 reused Dell XPS 15 laptops
+│   ├── Servers             # 2× Dell PowerEdge R640, 1× HPE DL180
+│   └── TestingLab          # Devices on VLAN 70 (Isolated Lab Network)
+│
+└── Groups
+    ├── GRP_Marketing_ReadWrite
+    ├── GRP_Sales_Read
+    ├── GRP_Logistics_ReadWrite
+    ├── GRP_Executives_Admin
+    ├── GRP_IT_FullControl
+    ├── GRP_Production_ReadWrite
+    └── GRP_GeneralStaff_Limited
+
+Notes:
+- Domain is internal-use only, avoiding external DNS conflicts.
+- OUs reflect actual department structure and device roles.
+- Group Policies will apply at the OU level (e.g., mapped drives, restrictions).
+- Security groups are used to manage folder access, resource permissions, and GPO filtering.
+- TestingLab is its own OU and subnet for isolated IT experimentation and logistics testing.
